@@ -8,3 +8,12 @@ services:
     ports:
       - 1433:1433
     mem_limit: 2G
+  queue:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: 123456
+    ports:
+      - 15672:15672
+      - 5672:5672
+    
