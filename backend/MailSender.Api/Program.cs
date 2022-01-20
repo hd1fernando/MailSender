@@ -1,4 +1,6 @@
 using MailSender.Api.Data.Context;
+using MailSender.Api.Repository;
+using MailSender.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 builder.Services.AddDbContext<MailSenderDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddTransient<IMailSenderRepository, MailSenderRepository>();
+builder.Services.AddTransient<IMailSenderService, MailSenderService>();
 
 builder.Services.AddControllers();
 
