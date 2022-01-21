@@ -12,6 +12,7 @@ builder.Services.AddDbContext<MailSenderDbContext>(options => options.UseSqlServ
 
 builder.Services.AddTransient<IMailSenderRepository, MailSenderRepository>();
 builder.Services.AddTransient<IMailSenderService, MailSenderService>();
+builder.Services.AddTransient<IQueueServices, QueueServices>();
 
 builder.Services.AddControllers();
 
