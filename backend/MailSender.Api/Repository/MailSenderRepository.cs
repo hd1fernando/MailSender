@@ -8,7 +8,7 @@ public class MailSenderRepository : IMailSenderRepository
 {
     private MailSenderDbContext Context;
     private DbSet<MailEntity> Set;
-    
+     
     public MailSenderRepository(MailSenderDbContext dbContext)
     {
         Context = dbContext;
