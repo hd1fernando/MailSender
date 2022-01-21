@@ -1,4 +1,5 @@
 using MailSender.Api.Data.Context;
+using MailSender.Api.Models;
 using MailSender.Api.Repository;
 using MailSender.Api.Services;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,8 @@ builder.Services.AddDbContext<MailSenderDbContext>(options => options.UseSqlServ
 builder.Services.AddTransient<IMailSenderRepository, MailSenderRepository>();
 builder.Services.AddTransient<IMailSenderService, MailSenderService>();
 builder.Services.AddTransient<IQueueServices, QueueServices>();
+
+builder.Services.Configure<RabbitMQOptions>(configuration.GetSection(nameof(RabbitMQOptions)));
 
 builder.Services.AddControllers();
 
