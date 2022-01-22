@@ -16,11 +16,11 @@ public class MailSenderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> SendMail(MailViewModel mailViewModel)
+    public async Task<ActionResult> SendMail(MailViewModel mailViewModel, CancellationToken cancellationToken = default)
     {
         var mail = mailViewModel.ToModel();
 
-        await MailSenderService.SendMailAsync(mail);
+        await MailSenderService.SendMailAsync(mail, cancellationToken);
 
         return Ok();
     }

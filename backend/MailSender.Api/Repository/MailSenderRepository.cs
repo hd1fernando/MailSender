@@ -8,16 +8,16 @@ public class MailSenderRepository : IMailSenderRepository
 {
     private MailSenderDbContext Context;
     private DbSet<MailEntity> Set;
-     
+
     public MailSenderRepository(MailSenderDbContext dbContext)
     {
         Context = dbContext;
         Set = dbContext.Set<MailEntity>();
     }
 
-    public async Task SaveAsync(MailEntity mailEntity)
+    public async Task SaveAsync(MailEntity mailEntity, CancellationToken cancellationToken = default)
     {
-        await Set.AddAsync(mailEntity);
-        await Context.SaveChangesAsync();
+        await Set.AddAsync(mailEntity, cancellationToken);
+        await Context.SaveChangesAsync(cancellationToken);
     }
 }

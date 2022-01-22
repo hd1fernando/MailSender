@@ -13,9 +13,9 @@ public class MailSenderService : IMailSenderService
         QueueServices = queueServices;
     }
 
-    public async Task SendMailAsync(MailEntity mailEntity)
+    public async Task SendMailAsync(MailEntity mailEntity, CancellationToken cancellationToken = default)
     {
-        await MailSenderRepository.SaveAsync(mailEntity);
+        await MailSenderRepository.SaveAsync(mailEntity, cancellationToken);
         QueueServices.AddToQueue(mailEntity);
     }
 
