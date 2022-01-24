@@ -1,5 +1,7 @@
 using System.Text;
+using System.Text.Json;
 using MailSender.Worker.Models;
+using MailSender.Worker.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
@@ -10,14 +12,16 @@ public class QueueClient
 
     private readonly RabbitMQOptions RabbitMQOptions;
     private readonly ILogger<QueueClient> Logger;
+    private readonly IEmailSender MailSender;
 
-    public QueueClient(IOptions<RabbitMQOptions> rabbitMq, ILogger<QueueClient> logger)
+    public QueueClient(IOptions<RabbitMQOptions> rabbitMq, ILogger<QueueClient> logger, IEmailSender mailSender = null)
     {
         ArgumentNullException.ThrowIfNull(rabbitMq, nameof(rabbitMq));
         ArgumentNullException.ThrowIfNull(logger, nameof(logger));
 
         Logger = logger;
         RabbitMQOptions = rabbitMq.Value;
+        MailSender = mailSender;
     }
 
     public void Run(string[] args)
@@ -41,11 +45,19 @@ public class QueueClient
 
         Logger.LogInformation("Waiting for messages.");
         var consumer = new EventingBasicConsumer(channel);
-        consumer.Received += (model, ea) =>
+        consumer.Received += async (model, ea) =>
         {
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
             Logger.LogInformation(" [[{0}] Received {1}", DateTime.Now, message);
+
+            var email = JsonSerializer.Deserialize<MailViewModel>(message);
+            
+            Logger.LogInformation(email.Subject);
+            Logger.LogInformation(email.Content);
+            Logger.LogInformation(email.Destiny);
+
+            await MailSender.SendAsync(email ?? throw new Exception($"{nameof(email)} can't be null"));
         };
         channel.BasicConsume(queue: "mail_sender", autoAck: true, consumer: consumer);
 

@@ -1,5 +1,6 @@
 ﻿
 using MailSender.Worker.Models;
+using MailSender.Worker.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -29,6 +30,8 @@ void ConfigureServices(IServiceCollection services)
         .Build();
 
     services.Configure<RabbitMQOptions>(configuration.GetSection(nameof(RabbitMQOptions)));
-
+    services.Configure<MailSettingsOptions>(configuration.GetSection(nameof(MailSettingsOptions)));
+    
     services.AddTransient<QueueClient>();
+    services.AddTransient<IEmailSender,EmailSender>();
 }
