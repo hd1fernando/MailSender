@@ -11,9 +11,9 @@ public class MailSettingsOptions
 public class MailViewModel
 {
     public int Id { get; set; }
-    public string? Subject { get; }
+    public string? Subject { get; set; }
 
-    public string? Content { get; }
+    public string? Content { get; set; }
 
-    public string? Destiny { get; }
+    public string? Destiny { get; set; }
 }

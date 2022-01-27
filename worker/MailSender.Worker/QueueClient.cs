@@ -51,7 +51,7 @@ public class QueueClient
             var message = Encoding.UTF8.GetString(body);
             Logger.LogInformation(" [[{0}] Received {1}", DateTime.Now, message);
 
-            var email = JsonSerializer.Deserialize<MailViewModel>(message);
+            var email = JsonSerializer.Deserialize<MailViewModel>(message) ?? throw new Exception($"{nameof(MailViewModel)} can't be null in the deseralization.");
             
             Logger.LogInformation(email.Subject);
             Logger.LogInformation(email.Content);

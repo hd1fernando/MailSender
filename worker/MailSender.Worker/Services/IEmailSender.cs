@@ -48,10 +48,12 @@ public class EmailSender : IEmailSender
 
             Logger.LogInformation($"Sending mail message to {email.Destiny}");
             await smtp.SendMailAsync(mail);
+
+            Logger.LogInformation("Mail sended");
         }
         catch (Exception e)
         {
-            Logger.LogError($"Something went wrong while trying send email for {email.Destiny}\n {e.Message}");
+            Logger.LogError($"Something went wrong while trying send email for {email.Destiny}\n Message: {e.Message}");
         }
     }
 

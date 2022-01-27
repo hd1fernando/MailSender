@@ -7,7 +7,7 @@ services:
       ACCEPT_EULA: "Y"
     ports:
       - 1433:1433
-    mem_limit: 2G
+    mem_limit: 1G
   queue:
     image: rabbitmq:3-management
     environment:
@@ -16,4 +16,5 @@ services:
     ports:
       - 15672:15672
       - 5672:5672
+    mem_limit: 250M
     
