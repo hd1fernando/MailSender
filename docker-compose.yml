@@ -17,4 +17,11 @@ services:
       - 15672:15672
       - 5672:5672
     mem_limit: 250M
-    
+  api:
+    image: sendmailapi
+    build: backend/MailSender.Api
+    ports:
+      - 5001:5001
+      - 5002:5002
+    depends_on:
+      - db
