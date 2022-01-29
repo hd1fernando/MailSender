@@ -1,27 +1,36 @@
-version: '2.4'
+version: '3'
 services:
-  db:
+  dbMailServer:
     image: "mcr.microsoft.com/mssql/server:2019-latest"
     environment:
       SA_PASSWORD: P@ssword42
       ACCEPT_EULA: "Y"
     ports:
       - 1433:1433
-    mem_limit: 1G
+    # mem_limit: 1G
   queue:
     image: rabbitmq:3-management
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: 123456
+    hostname: "rabbitmq"
     ports:
       - 15672:15672
       - 5672:5672
-    mem_limit: 250M
+    # mem_limit: 250M
   api:
-    image: sendmailapi
+    image: sendmai.api
     build: backend/MailSender.Api
+    environment:
+      DbServer: "localhost"
+      DbPort: "1433"
+      DbUser: "SA"
+      Password: "P@ssword42"
+      Database: "MailSender"
     ports:
-      - 5001:5001
-      - 5002:5002
+      - 8080:80
     depends_on:
-      - db
+      - dbMailServer
+      - queue
+  # worker:
+  #   image: sendmail.worker.5
+  #   build: worker/MailSender.Worker
+  #   depends_on:
+  #     - queue
