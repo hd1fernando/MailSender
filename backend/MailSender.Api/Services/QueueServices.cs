@@ -22,7 +22,8 @@ public class QueueServices : IQueueServices
         {
             HostName = RabbitMqOptions.Value.HostName,
             UserName = RabbitMqOptions.Value.UserName,
-            Password = RabbitMqOptions.Value.Password
+            Password = RabbitMqOptions.Value.Password,
+            Port = 5672
         };
 
         using var connection = factory.CreateConnection();
@@ -33,7 +34,7 @@ public class QueueServices : IQueueServices
         var body = Encoding.UTF8.GetBytes(message);
 
         channel.BasicPublish(exchange: "", routingKey: "mail_sender", basicProperties: null, body: body);
-        
+
         Console.WriteLine($" [{DateTime.Now}] Sent {message}");
     }
 }

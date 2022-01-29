@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var configuration = builder.Configuration;
 
+
 builder.Services.AddDbContext<MailSenderDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddTransient<IMailSenderRepository, MailSenderRepository>();
@@ -24,8 +25,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-
 var app = builder.Build();
+
+using var scope =  app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var context = services.GetRequiredService<MailSenderDbContext>();
+context.Database.Migrate();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
