@@ -32,12 +32,6 @@ services:
   api:
     image: sendmai.api
     build: backend/MailSender.Api
-    environment:
-      DbServer: "localhost"
-      DbPort: "1433"
-      DbUser: "SA"
-      Password: "P@ssword42"
-      Database: "MailSender"
     ports:
       - 8080:80
     depends_on:
