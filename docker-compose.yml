@@ -1,4 +1,9 @@
 version: '3'
+
+networks:
+  db:
+  workers:
+
 services:
   dbMailServer:
     image: "mcr.microsoft.com/mssql/server:2019-latest"
@@ -7,6 +12,8 @@ services:
       ACCEPT_EULA: "Y"
     ports:
       - 1433:1433
+    networks:
+      - db
     # mem_limit: 1G
   rabbitmq:
     image: rabbitmq:3-management
@@ -19,6 +26,8 @@ services:
       interval: 5s
       timeout: 15s
       retries: 5
+    networks:
+      - workers
     # mem_limit: 250M
   api:
     image: sendmai.api
@@ -34,9 +43,14 @@ services:
     depends_on:
       - dbMailServer
       - rabbitmq
+    networks:
+      - db
+      - workers
   worker:
     image: sendmail.worker
     build: worker/MailSender.Worker
     restart: on-failure
     depends_on:
       - rabbitmq
+    networks:
+      - workers
