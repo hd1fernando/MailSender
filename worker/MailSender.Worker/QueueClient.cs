@@ -10,6 +10,7 @@ using RabbitMQ.Client.Events;
 public class QueueClient
 {
 
+    static AutoResetEvent AutoEvent = new AutoResetEvent(false);
     private readonly RabbitMQOptions RabbitMQOptions;
     private readonly ILogger<QueueClient> Logger;
     private readonly IEmailSender MailSender;
@@ -26,11 +27,15 @@ public class QueueClient
 
     public void Run(string[] args)
     {
+        Logger.LogInformation("{0},{1},{2}", RabbitMQOptions.HostName, RabbitMQOptions.UserName, RabbitMQOptions.Password);
+        Thread.Sleep(TimeSpan.FromSeconds(5));
+
         var factory = new ConnectionFactory()
         {
             HostName = RabbitMQOptions.HostName,
             UserName = RabbitMQOptions.UserName,
-            Password = RabbitMQOptions.Password
+            Password = RabbitMQOptions.Password,
+            Port = 5672
         };
 
         Logger.LogInformation("Starting connection with RabbitMQ");
@@ -49,19 +54,15 @@ public class QueueClient
         {
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-            Logger.LogInformation(" [[{0}] Received {1}", DateTime.Now, message);
+            Logger.LogInformation(" [[{0}] Received {1}", DateTime.UtcNow, message);
 
             var email = JsonSerializer.Deserialize<MailViewModel>(message) ?? throw new Exception($"{nameof(MailViewModel)} can't be null in the deseralization.");
-            
-            Logger.LogInformation(email.Subject);
-            Logger.LogInformation(email.Content);
-            Logger.LogInformation(email.Destiny);
 
             await MailSender.SendAsync(email ?? throw new Exception($"{nameof(email)} can't be null"));
         };
         channel.BasicConsume(queue: "mail_sender", autoAck: true, consumer: consumer);
 
-        Logger.LogInformation(" Press [enter] to exit.");
-        Console.ReadLine();
+        Logger.LogInformation(" Awating for messages.");
+        AutoEvent.WaitOne();
     }
 }
