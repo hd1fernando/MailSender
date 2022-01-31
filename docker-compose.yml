@@ -8,12 +8,17 @@ services:
     ports:
       - 1433:1433
     # mem_limit: 1G
-  queue:
+  rabbitmq:
     image: rabbitmq:3-management
     hostname: "rabbitmq"
     ports:
       - 15672:15672
       - 5672:5672
+    healthcheck:
+      test: ["CMD", "nc","-z","localhost","5672"]
+      interval: 5s
+      timeout: 15s
+      retries: 5
     # mem_limit: 250M
   api:
     image: sendmai.api
@@ -28,9 +33,10 @@ services:
       - 8080:80
     depends_on:
       - dbMailServer
-      - queue
-  # worker:
-  #   image: sendmail.worker.5
-  #   build: worker/MailSender.Worker
-  #   depends_on:
-  #     - queue
+      - rabbitmq
+  worker:
+    image: sendmail.worker
+    build: worker/MailSender.Worker
+    restart: on-failure
+    depends_on:
+      - rabbitmq
