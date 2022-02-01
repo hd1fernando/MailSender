@@ -6,8 +6,18 @@ A simple distributed system made to send emails.
 
 
 ## How to run this project on your machine:
-After cloning this project just run the command below:
+After cloning this you need to enter your email configuration in the file settins/appsettings.json in the section 'MailSettingsOptions'.
+ex:
+```
+ "MailSettingsOptions": {
+    "Domain": "smtp.gmail.com",
+    "Port": "587",
+    "UserEmail": "testeemail@gmail.com",
+    "UserPassword": "d&!gct3qrLbd#B!%62@mOUP1qkd4MiQVoNqKhRmn60IqbF&Va2u!BiY7nUQRhKakO@lNgivtu45yL#GF7!DB%kgVve0P^yKYFNe"
+  },
+```
 
+After that just execute the docker-compose command:
 ```
 docker-compose up -d
 ```
@@ -34,7 +44,7 @@ ex:
 ```
 
 
-## Todo
+## TODO
 - [ ] Create front end SPA.
 - [ ] Configure a reverse proxy to consume the API.
 - [ ] Configure middleware in the API to deal with exceptions.
