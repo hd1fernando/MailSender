@@ -22,7 +22,7 @@ services:
       - 15672:15672
       - 5672:5672
     healthcheck:
-      test: ["CMD", "nc","-z","localhost","5672"]
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
       interval: 5s
       timeout: 15s
       retries: 5
@@ -30,8 +30,10 @@ services:
       - workers
     # mem_limit: 250M
   api:
-    image: sendmai.api
+    image: sendmai.api.11
     build: backend/MailSender.Api
+    volumes:
+      - ./settings/appsettings.json:/app/appsettings.json
     ports:
       - 8080:80
     depends_on:
@@ -41,7 +43,9 @@ services:
       - db
       - workers
   worker:
-    image: sendmail.worker
+    image: sendmail.worker.11
+    volumes:
+      - ./settings/appsettings.json:/app/appsettings.json
     build: worker/MailSender.Worker
     restart: on-failure
     depends_on:
