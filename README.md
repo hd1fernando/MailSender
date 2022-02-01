@@ -2,6 +2,8 @@
 A simple distributed system made to send emails.
 
 ## Architecture
+![alt text](https://github.com/hd1fernando/MailSender/blob/main/docs/Untitled%20Diagram.drawio.png?raw=true)
+
 
 ## How to run this project on your machine:
 After cloning this project just run the command below:
