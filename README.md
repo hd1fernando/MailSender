@@ -6,7 +6,7 @@ A simple distributed system made to send emails.
 
 
 ## How to run this project on your machine:
-After cloning this you need to enter your email configuration in the file settins/appsettings.json in the section 'MailSettingsOptions'.
+After cloning this project you need to enter your email configuration in the file settins/appsettings.json in the section 'MailSettingsOptions'.
 ex:
 ```
  "MailSettingsOptions": {
@@ -17,7 +17,7 @@ ex:
   },
 ```
 
-After that just execute the docker-compose command:
+After that, just execute the docker-compose command:
 ```
 docker-compose up -d
 ```
