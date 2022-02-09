@@ -51,3 +51,10 @@ ex:
 - [ ] Configure middleware in the Worker to deal with exceptions.
 - [ ] Add log service in API.
 - [ ] Add log service in Worker.
+- [ ] Log email sended.
+- [ ] Add user login.
+- [ ] Enable user schedule email.
+- [ ] Enable user save email format.
+- [ ] Enable user add a list of destinations.
+- [ ] Enable user define mail sender
+- [ ] Enable user customize email with variables like: sender, destination, etc.
